@@ -119,9 +119,14 @@
 							<div class="span12">
 								<div class="table-toolbar">
 									<div class="btn-group">
+									<label>
 										<button class="btn btn-success"  data-toggle="modal" data-target="#uploadModel">
 												上传<i class="icon-plus icon-white"></i>
-											</button>
+										</button>
+										<button class="btn btn-primary"  data-toggle="modal" data-target="#folderModel">
+												新建文件夹<i class="icon-plus icon-white"></i>
+												</button>
+										</label>
 									</div>
 									<!-- 上传模态框  -->
 									<div class="modal fade" id="uploadModel">
@@ -138,6 +143,7 @@
 												<div class="modal-body"></div>
 											</div>
 										</div>
+
 									</div>
 									<!-- 排序  -->
 									<div class="btn-group pull-right">
@@ -154,11 +160,10 @@
 									<div class="row">
 										<div class="span6">
 											<div id="example2_length" class="dataTables_length">
-												<label> 
-												</label>
+												<label>当前位置：${filepath}</label>
 											</div>
 										</div>
-										<div class="span6 pull-right">
+										<div class="span6">
 											<div id="example2_length" class="dataTables_length">
 												<label>
 													<form action="SearchFileServlet" enctype="multipart/form-data" method="get">
@@ -169,7 +174,21 @@
 											</div>
 										</div>
 									</div>
-								
+								<!-- 新建文件夹模态框  -->
+									<div class="modal fade" id="folderModel">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title" id="myModalLabel">新建文件夹</h4>
+													<form action="FolderServlet" enctype="multipart/form-data" method="get">
+														<input type="text" name="newfoldername"> 
+														<button class="btn btn-primary" type="submit">新建</button>
+													</form>
+												</div>
+												<div class="modal-body"></div>
+											</div>
+										</div>
+									</div>
 								<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="filestable">
 									<thead>
 										<tr>
@@ -182,15 +201,37 @@
 									<tbody>
 										<c:forEach var="files" items="${files}">
 											<tr>
-												<th>${files.getFileName()}</th>
+												<th>
+													<c:if test="${files.getType() eq 'folder'}" var="flag">
+														<c:url value="FileListServlet" var="listurl">
+															<c:param name="filepath" value="${files.getPath()}"></c:param>
+															<c:param name="foldername" value="${files.getFileName()}"></c:param>
+														</c:url> <a href="${listurl}">${files.getFileName()}</a> 
+													</c:if>
+													<c:if test="${not flag}">
+														${files.getFileName()}
+													</c:if>
+												</th>
 												<th>${files.getSize()}字节</th>
 												<th>${files.getUpdateTime()}</th>
-												<th><c:url value="DownloadServlet" var="downurl">
-														<c:param name="filename" value="${files.getFileName()}"></c:param>
-													</c:url> <a href="${downurl}">下载</a> <c:url value="DeleteServlet"
-														var="deleteurl">
-														<c:param name="filename" value="${files.getFileName()}"></c:param>
-													</c:url> <a href="${deleteurl}">删除</a></th>
+												<th>
+													<c:if test="${files.getType() eq 'folder'}" var="flag">
+														<c:url value="DeleteFolderServlet" var="deletefolderurl">
+															<c:param name="foldername" value="${files.getFileName()}"></c:param>
+														</c:url>
+														<a href="${deletefolderurl}">删除</a>
+													</c:if> 
+													<c:if test="${not flag}">
+														<c:url value="DownloadServlet" var="downurl">
+															<c:param name="filename" value="${files.getFileName()}"></c:param>
+														</c:url>
+														<a href="${downurl}">下载</a>
+														<c:url value="DeleteServlet" var="deleteurl">
+															<c:param name="filename" value="${files.getFileName()}"></c:param>
+														</c:url>
+														<a href="${deleteurl}">删除</a>
+													</c:if>
+												</th>
 											</tr>
 										</c:forEach>
 									</tbody>

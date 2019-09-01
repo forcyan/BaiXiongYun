@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import biz.impl.FileHandleBizImpl;
 import dao.impl.FileDaoImpl;
 import entity.FileMessage;
 
@@ -31,23 +32,23 @@ public class DeleteServlet extends HttpServlet {
             throws ServletException, IOException {
     	HttpSession session = request.getSession();
 		String userName = (String) session.getAttribute("name");
-		
-		
+		String filepath = (String) session.getAttribute("filepath");
     	//得到要下载的文件名
         String fileName = request.getParameter("filename"); 
         System.out.println("将要删除："+fileName);
         //查询数据库
         System.out.println("在数据库寻找文件");
         FileDaoImpl FileDaoImpl = new FileDaoImpl();
-        String path="upload";
-        Vector<FileMessage> files = FileDaoImpl.findFilesByPathAndUser(path,userName);
+        Vector<FileMessage> files = FileDaoImpl.findFilesByPathAndUser(filepath,userName);
         if(files.isEmpty()){
             request.setAttribute("message", "文件不存在");
             request.getRequestDispatcher("FileListServlet").forward(request, response);
             return;
         }
+        FileHandleBizImpl filehandle=new FileHandleBizImpl();
+		FileMessage thefile=filehandle.searchFile(files, fileName);
         //获取文件uuid
-        String fileuuid=files.get(0).getUuidName();
+        String fileuuid=thefile.getUuidName();
         System.out.println("文件uuid："+fileuuid);
         
         
@@ -56,8 +57,8 @@ public class DeleteServlet extends HttpServlet {
         String fileSaveRootPath=this.getServletContext().getRealPath("upload");
 
         //得到要删除的文件
-        File file = new File(fileSaveRootPath + "\\" + fileuuid+"."+files.get(0).getType());
-        System.out.println(fileSaveRootPath + "\\" + fileuuid+"."+files.get(0).getType());
+        File file = new File(fileSaveRootPath + "\\" + fileuuid+"."+thefile.getType());
+        System.out.println(fileSaveRootPath + "\\" + fileuuid+"."+thefile.getType());
         //如果文件不存在
         if(!file.exists()){
             request.setAttribute("message", "文件不存在");

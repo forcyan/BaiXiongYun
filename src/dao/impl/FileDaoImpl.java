@@ -146,4 +146,5 @@ public class FileDaoImpl extends BaseDao implements FileDao {
 
 		return (Integer) this.executeQuery(getResultProcessor, sql);
 	}
+
 }

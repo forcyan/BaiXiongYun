@@ -39,6 +39,7 @@ public class UploadServlet extends HttpServlet {
 			// 获取用户名
 			HttpSession session = request.getSession();
 			String userName = (String) session.getAttribute("name");
+			String filepath = (String) session.getAttribute("filepath");
 			// 获取上传的文件
 			Part part = request.getPart("file");
 			// 获取请求的信息
@@ -74,13 +75,13 @@ public class UploadServlet extends HttpServlet {
 				// 将文件信息写到数据库
 				System.out.println("文件写入数据库");
 				FileDaoImpl fileDaoImpl = new FileDaoImpl();
-				FileMessage file = new FileMessage(filename, uuid, now_time, filetype, "upload", userName, filesize);
+				FileMessage file = new FileMessage(filename, uuid, now_time, filetype, filepath, userName, filesize);
 				fileDaoImpl.addFile(file);
 			}
-			request.setAttribute("info", "上传文件成功");
+			request.setAttribute("message", "上传文件成功");
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("info", "上传文件失败");
+			request.setAttribute("message", "上传文件失败");
 		}
 
 		request.getRequestDispatcher("FileListServlet").forward(request, response);

@@ -5,6 +5,18 @@
 <head>
 <title>Login</title>
 <!-- Bootstrap -->
+<style>
+html {
+	width: 100%;
+	height: 100%
+}
+body {
+	width: 100%;
+	height: 100%;
+	background: url(images/body.jpg) no-repeat;
+	background-size: cover;
+}
+</style>
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
 <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"
@@ -15,25 +27,33 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+
 </head>
 <body id="login">
     <div class="container">
-      <form class="form-signin" name="loginForm"  method="post" action="" novalidate>
-        <h2 class="form-signin-heading">请登录</h2>
-        <label for="inputAccount" class="sr-only">账号</label>
-        <input type="text" name="userName" id="userName" class="form-control" placeholder="邮箱地址" >
-        <label for="inputPassword" class="sr-only">密码</label>
-        <input type="password" name="pwd" id="pwd" class="form-control" placeholder="密码">
-        <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-        <button class="btn btn-large btn-primary" onclick="ToLogin()">Login</button>
-        <button class="btn btn-large" data-toggle="modal" data-target="#signupModel">注册</button>
-      </form>
+		<form class="form-signin" name="loginForm" method="post" action=""
+			novalidate>
+			<h2 class="form-signin-heading">请登录</h2>
+			<label for="inputAccount" class="sr-only">账号</label> 
+			<input type="text" name="userName" id="userName" class="form-control" placeholder="邮箱地址"> 
+			<label for="inputPassword" class="sr-only">密码</label> 
+			<input type="password" name="pwd" id="pwd" class="form-control" placeholder="密码"> 
+			<label class="checkbox"> 
+			<input type="checkbox" value="remember-me">Remember me
+			</label>
+			<button class="btn btn-large btn-primary" onclick="ToLogin()">Login</button>
+			<button class="btn btn-large" data-toggle="modal"
+				data-target="#signupModel">注册</button>
+			<c:if test="${not empty message}">
+			<div class="alert alert-danger alert-dismissable" style="display: none;" id="registerError">
+				<strong>${message}</strong>
+			</div>
+		</c:if>
+		</form>
 
 	</div> <!-- /container -->
 	<!-- 注册模态框  -->
-	<div class="modal fade" id="signupModel">
+	<div class="modal fade"  aria-hidden="true" style="display: none;" id="signupModel">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -77,11 +97,6 @@
 								<button class="btn btn-large" data-dismiss="modal">取消</button>
 							</div>
 						</fieldset>
-						<c:if test="${not empty message }">
-							<div class="alert alert-danger" id="registerError">
-								<strong>${message }</strong>
-							</div>
-						</c:if>
 					</form>
 				</div>
 			</div>

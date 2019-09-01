@@ -51,13 +51,11 @@ public class LoginServlet extends HttpServlet{
 			// 登录成功
 			// 添加cookie
 			System.out.println("用户名密码正确，添加cookie");
-			request.getSession().setAttribute("name", userName);
 			Cookie cookie=new Cookie("sso",userName);
 			cookie.setMaxAge(30 * 60);
 			response.addCookie(cookie);
-			request.setAttribute("userName", userName);
+			request.getSession().setAttribute("name", userName);
 			request.getRequestDispatcher("FileListServlet").forward(request, response);
-			//response.sendRedirect("FileListServlet");
 		}
 	}
 

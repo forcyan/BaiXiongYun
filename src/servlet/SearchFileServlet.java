@@ -61,6 +61,7 @@ public class SearchFileServlet extends HttpServlet {
 				files.add(tmp);
 			}
 		}
+		
 		request.setAttribute("files", files);
 		request.getRequestDispatcher("home.jsp").forward(request, response);
     }

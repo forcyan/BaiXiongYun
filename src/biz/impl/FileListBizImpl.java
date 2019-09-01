@@ -17,7 +17,7 @@ public class FileListBizImpl implements FileListBiz {
 	}
 	
 	@Override
-	public Vector<FileMessage> getFilesByUser( String userName) {
+	public Vector<FileMessage> getFilesByUser(String userName) {
 		FileDaoImpl fileDaoImpl = new FileDaoImpl();
 		Vector<FileMessage> files = fileDaoImpl.findFilesByUser(userName);
 		return files;
